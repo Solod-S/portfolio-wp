@@ -1,121 +1,39 @@
 <?php
-/**
- * Intentionally Blank Theme functions
- *
- * @package WordPress
- * @subpackage intentionally-blank
- */
+// Регистрируем функцию 'enqueue_scripts', которая будет вызываться WordPress-ом, 
+// чтобы подключить стили и скрипты на сайте
+add_action('wp_enqueue_scripts', 'enqueue_scripts');
 
-if ( ! function_exists( 'blank_setup' ) ) :
-	/**
-	 * Sets up theme defaults and registers the various WordPress features that
-	 * this theme supports.
-	 */
-	function blank_setup() {
-		load_theme_textdomain( 'intentionally-blank' );
-		add_theme_support( 'automatic-feed-links' );
-		add_theme_support( 'title-tag' );
-		add_theme_support( 'post-thumbnails' );
+// Определяем функцию, которая подключает CSS и JavaScript
+function enqueue_scripts()
+{
+	// Подключаем основной CSS-файл из папки assets внутри темы
+	wp_enqueue_style(
+		'main-css', // Уникальный идентификатор для стиля
+		get_template_directory_uri() . '/assets/main.css', // Путь к файлу
+		array(), // Зависимости (если есть другие стили, от которых зависит этот)
+		'1.0.0', // Версия файла
+		'all' // Тип устройства (all = для всех устройств)
+	);
 
-		// This theme allows users to set a custom background.
-		add_theme_support(
-			'custom-background',
-			array(
-				'default-color' => 'f5f5f5',
-			)
-		);
-
-		add_theme_support( 'custom-logo' );
-		add_theme_support(
-			'custom-logo',
-			array(
-				'height'      => 256,
-				'width'       => 256,
-				'flex-height' => true,
-				'flex-width'  => true,
-				'header-text' => array( 'site-title', 'site-description' ),
-			)
-		);
-	}
-endif; // end function_exists blank_setup.
-
-add_action( 'after_setup_theme', 'blank_setup' );
-
-remove_action( 'wp_head', '_custom_logo_header_styles' );
-
-if ( ! is_admin() ) {
-	add_action(
-		'wp_enqueue_scripts',
-		function() {
-			wp_dequeue_style( 'global-styles' );
-			wp_dequeue_style( 'classic-theme-styles' );
-			wp_dequeue_style( 'wp-block-library' );
-		}
+	// Подключаем основной JavaScript-файл из папки assets
+	wp_enqueue_script(
+		'main-js', // Уникальный идентификатор скрипта
+		get_template_directory_uri() . '/assets/main.js', // Путь к файлу
+		[], // Зависимости (например, jQuery, если нужен)
+		'1.0.0', // Версия скрипта
+		true // true = подключить внизу страницы перед закрывающим тегом </body>
 	);
 }
-/**
- * Sets up theme defaults and registers the various WordPress features that
- * this theme supports.
 
- * @param class $wp_customize Customizer object.
- */
-function blank_customize_register( $wp_customize ) {
-	$wp_customize->remove_section( 'static_front_page' );
+// Используем фильтр 'the_content', чтобы изменить содержимое постов
+// add_filter('the_content', 'add_custom_content', 10, 1);
 
-	$wp_customize->add_section(
-		'blank_footer',
-		array(
-			'title'      => __( 'Footer', 'intentionally-blank' ),
-			'priority'   => 120,
-			'capability' => 'edit_theme_options',
-			'panel'      => '',
-		)
-	);
-	$wp_customize->add_setting(
-		'blank_copyright',
-		array(
-			'type'              => 'theme_mod',
-			'default'           => __( 'Intentionally Blank - Proudly powered by WordPress', 'intentionally-blank' ),
-			'sanitize_callback' => 'wp_kses_post',
-		)
-	);
+// Функция, которая заменяет содержимое поста на свой текст
+// там где используем  the_content();
 
-	/**
-	 * Checkbox sanitization function
-
-	 * @param bool $checked Whether the checkbox is checked.
-	 * @return bool Whether the checkbox is checked.
-	 */
-	function blank_sanitize_checkbox( $checked ) {
-		// Returns true if checkbox is checked.
-		return ( ( isset( $checked ) && true === $checked ) ? true : false );
-	}
-	$wp_customize->add_setting(
-		'blank_show_copyright',
-		array(
-			'default'           => true,
-			'sanitize_callback' => 'blank_sanitize_checkbox',
-		)
-	);
-	$wp_customize->add_control(
-		'blank_copyright',
-		array(
-			'type'     => 'textarea',
-			'label'    => __( 'Copyright Text', 'intentionally-blank' ),
-			'section'  => 'blank_footer',
-			'settings' => 'blank_copyright',
-			'priority' => '10',
-		)
-	);
-	$wp_customize->add_control(
-		'blank_footer_copyright_hide',
-		array(
-			'type'     => 'checkbox',
-			'label'    => __( 'Show footer with copyright Text', 'intentionally-blank' ),
-			'section'  => 'blank_footer',
-			'settings' => 'blank_show_copyright',
-			'priority' => '20',
-		)
-	);
+function add_custom_content($content)
+{
+	// Заменяем весь текст поста на нашу кастомную строку
+	$content = '<p style="font-size: 64px"> Custom content<p/>';
+	return $content;
 }
-add_action( 'customize_register', 'blank_customize_register', 100 );
