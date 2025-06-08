@@ -131,3 +131,7 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+
+
+/public/wp-content/themes/**/node_modules/
+/dev_portfolio/**/node_modules/
