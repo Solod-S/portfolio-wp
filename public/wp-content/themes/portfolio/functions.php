@@ -11,3 +11,6 @@ if (!defined('_VERSION')) {
 
 // подключаем кастомные функции темы (скрипты + стили)
 require get_template_directory() . '/inc/_custom.php';
+
+// Post tYзpe — типы записей
+require get_template_directory() . '/inc/_post_types.php';

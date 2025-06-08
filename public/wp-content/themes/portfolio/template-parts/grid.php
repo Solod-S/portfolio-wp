@@ -3,7 +3,7 @@
 ?>
 
 <div class="flex">
-  <div class="col-3">item 1</div>
-  <div class="col-3">item 2</div>
-  <div class="col-3">item 3</div>
+  <div class="col-1">item 1</div>
+  <div class="col-1">item 2</div>
+  <div class="col-1">item 3</div>
 </div>

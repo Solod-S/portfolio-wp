@@ -23,11 +23,40 @@ get_header();
 
 <!-- Подключение дополнительного HTML-шаблона двумя способами -->
 
-<?php require get_template_directory() . '/assets/html/grid.html'; ?>
+<!-- <?php require get_template_directory() . '/assets/html/grid.html'; ?> -->
 <!-- Первый способ: подключение обычного HTML-файла напрямую через require -->
 
 <?php get_template_part('template-parts/grid'); ?>
 <!-- Второй способ (рекомендуемый в WordPress): подключение шаблона из папки template-parts -->
 <!-- будет искать файл: wp-content/themes/your-theme/template-parts/grid.php -->
+
+<?php
+// Получаем последние 6 записей типа "project"
+$post_projects = get_posts(array(
+  'post_type' => 'project',       // Указываем, что нужны записи кастомного типа 'project'
+  'posts_per_page' => 6,          // Ограничиваем количество выводимых записей до 6
+  'orderby' => 'date',            // Сортируем записи по дате публикации
+  'order' => 'DESC',              // В порядке убывания (сначала новые)
+));
+
+// Проверяем, есть ли найденные записи
+if ($post_projects):
+  // Запускаем цикл по найденным проектам
+  foreach ($post_projects as $post):
+    setup_postdata($post);       // Устанавливаем глобальные переменные WP для текущего поста
+    ?>
+    <div class="col-3">
+      <h1><?php the_title(); ?></h1> <!-- Выводим заголовок проекта -->
+      <h4>Project Single</h4> <!-- Просто подпись или подзаголовок -->
+      <?php the_content(); ?> <!-- Выводим содержимое проекта -->
+    </div>
+    <?php
+  endforeach;
+
+  wp_reset_postdata(); // Сброс глобальных переменных после окончания цикла
+endif;
+?>
+
+
 
 <?php get_footer(); // Подключение footer.php (подвала сайта) ?>

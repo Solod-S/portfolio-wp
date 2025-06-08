@@ -2,3 +2,10 @@ body {
   /* background-color: black;
   color: white; */
 }
+
+.col-3 {
+  width: 32%;
+  float: left;
+  padding: 0 15px;
+  margin-bottom: 30px;
+}
