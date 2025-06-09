@@ -14,10 +14,4 @@ require get_template_directory() . '/inc/_scripts.php';
 require get_template_directory() . '/inc/_post-types.php';
 
 // Register menus
-function register_my_menus()
-{
-	register_nav_menus(array(
-		'header-menu' => __('Header Menu'),
-		'footer-menu' => __('Footer Menu'),
-	));
-}
+require get_template_directory() . '/inc/_menus.php';
