@@ -6,9 +6,9 @@
 
 get_header(); ?>
 
-<!-- Hero section -->
+<!-- Hero section to page (нужно настраивать еще и параметры где отображать в админке) -->
+<?php // get_template_part('template-parts/home-page-hero', "hero") ?>
 
-<?php get_template_part('template-parts/home-page-hero', "hero") ?>
-
+<?php the_content() ?>
 
 <?php get_footer(); ?>

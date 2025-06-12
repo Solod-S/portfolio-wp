@@ -1,16 +1,20 @@
 <?php
 // Получаем значение поля 'show_hero'. Если false — не выводим секцию
 $show = get_field('show_hero');
-if (!$show) {
-  return; // Прерываем выполнение, если секция отключена
+if (!is_admin() && !$show) {
+  return; // Прерываем выполнение, не админ
 }
 
+// if (!$show) {
+//   return; // Прерываем выполнение, если секция отключена
+// }
+
 // Получаем данные из ACF
-$hero_title = get_field('hero_title'); // Заголовок hero-секции
-$hero_description = get_field('hero_description'); // Описание
+$hero_title = get_field('hero_title') ?? "Title here..."; // Заголовок hero-секции
+$hero_description = get_field('hero_description') ?? "Description here..."; // Описание
 $hero_buttons = get_field('hero_buttons'); // Кнопки Call-To-Action (массив)
-$first_cta = $hero_buttons["lets_talk"]; // Первая кнопка (например, "Давайте поговорим")
-$second_cta = $hero_buttons["cta_portfolio"]; // Вторая кнопка (например, "Портфолио")
+$first_cta = $hero_buttons["lets_talk"] ?? ""; // Первая кнопка (например, "Давайте поговорим")
+$second_cta = $hero_buttons["cta_portfolio"] ?? ""; // Вторая кнопка (например, "Портфолио")
 $hero_image = get_field('hero_image'); // Картинка
 ?>
 
@@ -68,6 +72,14 @@ $hero_image = get_field('hero_image'); // Картинка
             <img src="<?php echo esc_url($hero_image['url']); ?>" alt="<?php echo esc_attr($hero_image['alt']); ?>"
               class="img-fluid mx-auto d-block" style="max-width: 70%; height: auto;" />
           </div>
+        <?php else:
+          // <!-- Если картинка не задана, показываем серый круг в админке-->
+          if (is_admin()): ?>
+            <svg width="270" height="270" viewBox="0 0 570 570" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="285" cy="285" r="285" fill="#D9D9D9" />
+            </svg>
+          <?php endif; ?>
+
         <?php endif; ?>
       </div>
 
